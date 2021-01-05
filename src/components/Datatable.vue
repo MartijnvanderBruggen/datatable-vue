@@ -47,6 +47,8 @@
                   <v-text-field
                     v-model="editedItem.product"
                     label="Product Name"
+                    :rules="[rules.product]"
+                    counter
                   ></v-text-field>
                 </v-col>
                 <v-col
@@ -55,8 +57,10 @@
                   md="4"
                 >
                   <v-text-field
-                    v-model="editedItem.quantity"
+                    v-model.number="editedItem.quantity"
                     label="Quantity"
+                    type="number"
+                    :rules="[rules.quantity]"
                   ></v-text-field>
                 </v-col>
                 <v-col
@@ -67,6 +71,8 @@
                   <v-text-field
                     v-model="editedItem.price"
                     label="Price"
+                    :rules="[rules.price]"
+
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -134,11 +140,11 @@
 <script>
 import axios from 'axios'
 
-
 export default {
   name: 'Datatable',
   data: () => ({
       apiurl: '',
+      valid: false,
       dialog: false,
       dialogDelete: false,
       headers: [],
@@ -149,27 +155,32 @@ export default {
         value: ''
       },
       data: [],
+      rules: {
+        product: v => v.length > 2 || "minumal 3 chars",
+        quantity: v => Number.isInteger(v) || "The value must be an integer number",
+        price: value => !!value || "Price field cannot be empty",
+      },
       editedIndex: -1,
+      test: '',
       editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        product: '',
+        quantity: 0,
+        price: 0
       },
       defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        product: '',
+        quantity: 0,
+        price: 0
       },
     }),
+
 
     computed: {
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
       },
+
+
     },
 
     watch: {
@@ -200,6 +211,7 @@ export default {
             temp["value"] = key
             this.headers.push(temp)
           })
+          //add actions column to headers
           let actions = Object.create({});
           actions.text ="Actions"
           actions.value="actions"

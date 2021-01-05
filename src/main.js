@@ -5,9 +5,11 @@ import store from "./store";
 import Vuetify from "vuetify/lib";
 import vuetify from "./plugins/vuetify";
 import "@mdi/font/css/materialdesignicons.css";
+import Vuelidate from 'vuelidate';
 
 Vue.config.productionTip = false;
 Vue.use(Vuetify);
+Vue.use(Vuelidate);
 
 new Vue({
   router,
