@@ -104,7 +104,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-            <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+            <v-btn color="blue darken-1" text @click="deleteItemConfirm(editedItem)">OK</v-btn>
             <v-spacer></v-spacer>
           </v-card-actions>
         </v-card>
@@ -219,8 +219,6 @@ export default {
           this.headers.push(actions)
         })
       },
-
-
       editItem (item) {
         this.editedIndex = this.data.indexOf(item)
         this.editedItem = Object.assign({}, item)
@@ -233,8 +231,11 @@ export default {
         this.dialogDelete = true
       },
 
-      deleteItemConfirm () {
-        this.data.splice(this.editedIndex, 1)
+      deleteItemConfirm (item) {
+
+        axios.delete(this.apiurl+'api/shoppinglist/'+ item.id).then(() =>{
+          this.refreshData()
+        })
         this.closeDelete()
       },
 
@@ -255,13 +256,28 @@ export default {
       },
 
       save () {
+        //item exists, edit  item
         if (this.editedIndex > -1) {
-          Object.assign(this.data[this.editedIndex], this.editedItem)
+          let Item = Object.assign(this.data[this.editedIndex], this.editedItem)
+          axios.put(this.apiurl+'api/shoppinglist/'+Item.id, Item)
         } else {
-          this.data.push(this.editedItem)
+          //create item
+          let newItem = Object.assign({}, this.editedItem)
+          axios.post(this.apiurl+'api/shoppinglist/',{
+              "product": newItem.product,
+              "price": newItem.price,
+              "quantity": newItem.quantity
+          }).then(()=>{
+              this.refreshData()
+          })
         }
         this.close()
       },
+      refreshData() {
+        axios.get(this.apiurl+'api/shoppinglist/').then((response) =>{
+          this.data = JSON.parse(response.data)
+        })
+      }
     }
   }
 </script>

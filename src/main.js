@@ -10,7 +10,7 @@ import Vuelidate from 'vuelidate';
 Vue.config.productionTip = false;
 Vue.use(Vuetify);
 Vue.use(Vuelidate);
-
+Vue.config.devtools = true;
 new Vue({
   router,
   store,
