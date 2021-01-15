@@ -113,7 +113,6 @@
         </v-dialog>
       </v-toolbar>
     </template>
-
     <template v-slot:item.actions="{ item }">
       <v-icon
         small
@@ -137,12 +136,15 @@
         Reset
       </v-btn>
     </template>
+    <template v-slot:footer>
+      <td v-for="header in headers" v-bind:key="header" >
+        <span v-if="header.value === 'price'">
+          Total:<v-chip  v-model="totalPrice" class="ml-5 mb-2">{{ totalPrice }}</v-chip>
+        </span>
+      </td>
+    </template>
   </v-data-table>
-  <v-bottom-navigation v-if="headers" v-model="headers">
-    <v-col v-for="header in headers" v-bind:key="header">
-      <v-chip v-if="header.value === 'price'" v-model="totalPrice" class="mt-2">{{ totalPrice }}</v-chip>
-    </v-col>
-  </v-bottom-navigation>
+
 </div>
 </template>
 <script>
@@ -187,20 +189,23 @@ export default {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
       },
       totalPrice () {
-        let totalPrice = 0
-        this.data.forEach((item) => {
-          totalPrice += item.price * item.quantity
+
+      let cart = this.data.reduce((total, item) => {
+          const { price, quantity } = item
+          total.items += quantity
+          total.price += price * quantity
+          return total
+        }, {
+          items: 0,
+          price: 0
         })
-        var formatter = new Intl.NumberFormat('en-US', {
+
+        let formatter = new Intl.NumberFormat('nl-NL', {
           style: 'currency',
-          currency: 'EUR',
-
-          // These options are needed to round to whole numbers if that's what you want.
-          //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
-          //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+          currency: 'EUR'
         });
-
-        return formatter.format(totalPrice)
+        this.$store.commit('updateCart', cart)
+        return formatter.format(cart.price)
       }
     },
 
@@ -210,7 +215,7 @@ export default {
       },
       dialogDelete (val) {
         val || this.closeDelete()
-      },
+      }
     },
 
     created () {
