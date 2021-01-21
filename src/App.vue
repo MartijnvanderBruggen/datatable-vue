@@ -1,13 +1,26 @@
 <template>
   <v-app>
-    <v-app-bar app color="black" dark>
-      <v-btn to="/">home</v-btn>
-      <v-divider vertical></v-divider>
-      <v-btn to="/datatable">datatable</v-btn>
-      <v-spacer></v-spacer>
-      <ShoppingCart></ShoppingCart>
-    </v-app-bar>
+    <v-app-bar app dark>
+       <v-app-bar-nav-icon></v-app-bar-nav-icon>
+       <v-toolbar-title>
+         <v-btn to="/">Home</v-btn>
+         <v-btn to="/datatable">Datatable</v-btn>
+         <v-btn to="/kb">Knowledge Base</v-btn>
+       </v-toolbar-title>
+       <v-spacer></v-spacer>
+       <v-btn icon>
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
 
+        <v-btn icon>
+          <v-icon>mdi-heart</v-icon>
+        </v-btn>
+
+        <v-btn icon>
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+       <ShoppingCart></ShoppingCart>
+     </v-app-bar>
     <v-main>
       <router-view></router-view>
     </v-main>

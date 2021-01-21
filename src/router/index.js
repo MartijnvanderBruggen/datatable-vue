@@ -2,6 +2,8 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import DataTable from "../views/DataTable.vue";
+import KnowledgeBase from "../components/KnowledgeBase.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -14,6 +16,11 @@ const routes = [
     path: "/datatable",
     name: "datatable",
     component: DataTable
+  },
+  {
+    path: "/kb",
+    name: "kb",
+    component: KnowledgeBase
   }
 ];
 

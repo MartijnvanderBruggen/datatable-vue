@@ -8,7 +8,8 @@ export default new Vuex.Store({
     shoppingCart: {
       items: 0,
       total: 0
-    }
+    },
+    url: 'http://192.168.10.10/api/knowledgebase/'
   },
   mutations: {
     updateCart(state, cart) {
